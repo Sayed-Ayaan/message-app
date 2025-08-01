@@ -1,18 +1,24 @@
-import {RouterProvider, createBrowserRouter} from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import SignUp from './pages/signup.jsx'
-import Home from './pages/signup.jsx'
+import Home from './pages/home.jsx'
+import Login from './pages/login.jsx';
+import PrivateRoute from './components/private.jsx';
 
-export default function Router(){
+export default function Router() {
   const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Home/>
-    },
-    {
-      path: "/signup",
-      element: <SignUp/>
+    { path: "/signup", element: <SignUp /> },
+    { path: "/login", element: <Login /> },
+    { 
+      path: "/", 
+      element: (
+        <PrivateRoute>
+          <Home />
+        </PrivateRoute>
+      )
     },
   ]);
 
-  return <RouterProvider router={router}/>
+  return (
+    <RouterProvider router={router} />
+  )
 }
