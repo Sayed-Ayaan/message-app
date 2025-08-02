@@ -8,13 +8,12 @@ export default function Router() {
   const router = createBrowserRouter([
     { path: "/signup", element: <SignUp /> },
     { path: "/login", element: <Login /> },
-    { 
-      path: "/", 
-      element: (
-        <PrivateRoute>
-          <Home />
-        </PrivateRoute>
-      )
+     {
+      path: "/",
+      element: <PrivateRoute />, 
+      children: [
+        { index: true, element: <Home /> },
+      ],
     },
   ]);
 

@@ -1,10 +1,16 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
+import Header from "../components/header"
 
-export default function PrivateRoute({ children }) {
+export default function PrivateRoute() {
   const { user, authLoading } = useAuth();
 
   if (authLoading) return <div>Loading...</div>;
 
-  return user ? children : <Navigate to="/login" />;
+  return user ? (
+    <div>
+      <Header/>
+      <Outlet />
+    </div>)
+    : <Navigate to="/login" />;
 }
