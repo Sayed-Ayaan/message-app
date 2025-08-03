@@ -86,7 +86,7 @@ const login = [
       }
 
       const access_token = jwt.sign({ id: user.rows[0].id }, process.env.ACCESS_SECRET_KEY, { expiresIn: '1h' });
-      res.cookie('access_token', access_token, {
+      res.cookie('accessToken', access_token, {
         httpOnly: true,
         sameSite: 'Lax',
         maxAge: 3600000,
