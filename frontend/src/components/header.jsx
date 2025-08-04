@@ -1,8 +1,9 @@
 import { useAuth } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const { user } = useAuth();
-
+  const navigate = useNavigate();
   return (
     <header className="flex items-center justify-between px-6 py-4 shadow-md bg-white dark:bg-black">
       <div className="text-lg font-semibold text-gray-700 dark:text-gray-200">
@@ -21,7 +22,7 @@ export default function Header() {
         >
           Groups
         </button>
-         <button
+         <button onClick={()=>navigate("/addfriend")}
           type="button"
           className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-white hover:bg-blue-500 transition rounded dark:text-gray-200"
         >
