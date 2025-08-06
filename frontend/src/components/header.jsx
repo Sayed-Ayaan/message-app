@@ -28,7 +28,7 @@ export default function Header() {
         >
           Add Friends
         </button>
-        <button
+        <button onClick={()=>navigate("/requests")}
           type="button"
           className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-white hover:bg-blue-500 transition rounded dark:text-gray-200"
         >

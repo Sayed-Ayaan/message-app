@@ -36,4 +36,29 @@ async function addFriend(req, res) {
   };
 };
 
-export { addFriend };
+async function friendRequest(req, res) {
+  try {
+    const username = req.query.username;
+    if (!username) {
+      return res.status(400).json({error: 'User not provided'});
+    }
+    let text = `SELECT * FROM users WHERE username=$1`;
+    const user = await pool.query(text, [username]);
+
+    if (user.rows.length == 0) {
+      return res.status(404).json({error: 'User not found'});
+    }
+    const receiverId = user.rows[0].id;
+    text = `SELECT user_requests.sender_id, users.username
+            FROM user_requests
+            JOIN users ON user_requests.sender_id = users.id
+            WHERE user_requests.receiver_id=$1`;
+    const requests = await pool.query(text, [receiverId]);
+
+    res.status(200).json({friends: requests.rows});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({error: 'Internal server error'})
+  }
+}
+export { addFriend, friendRequest};
