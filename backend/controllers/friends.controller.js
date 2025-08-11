@@ -40,13 +40,13 @@ async function friendRequest(req, res) {
   try {
     const username = req.query.username;
     if (!username) {
-      return res.status(400).json({error: 'User not provided'});
+      return res.status(400).json({ error: 'User not provided' });
     }
     let text = `SELECT * FROM users WHERE username=$1`;
     const user = await pool.query(text, [username]);
 
     if (user.rows.length == 0) {
-      return res.status(404).json({error: 'User not found'});
+      return res.status(404).json({ error: 'User not found' });
     }
     const receiverId = user.rows[0].id;
     text = `SELECT user_requests.sender_id, users.username
@@ -54,11 +54,33 @@ async function friendRequest(req, res) {
             JOIN users ON user_requests.sender_id = users.id
             WHERE user_requests.receiver_id=$1`;
     const requests = await pool.query(text, [receiverId]);
-
-    res.status(200).json({friends: requests.rows});
+    res.status(200).json({ friends: requests.rows });
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: 'Internal server error'})
+    res.status(500).json({ error: 'Internal server error' })
   }
 }
-export { addFriend, friendRequest};
+
+async function deleteFriendRequest(req, res) {
+  try {
+    const senderID = req.query.senderID;
+    const receiverUsername = req.query.username;
+
+    let text = `SELECT id FROM users WHERE username=$1`;
+    const receiver = await pool.query(text, [receiverUsername]);
+    if (receiver.rowCount == 0) {
+      return res.status(404).json({ error: 'User not Found' });
+    }
+
+    text = `DELETE FROM user_requests WHERE sender_id=$1 AND receiver_id=$2`;
+    const deleteReq = await pool.query(text, [senderID, receiver.rows[0].id]);
+    if (deleteReq.rowCount === 0) {
+      return res.status(404).json({ error: 'No friend request found to delete' });
+    }
+    res.status(200).json({ message: 'Successful', deleteReq });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+export { addFriend, friendRequest, deleteFriendRequest };
