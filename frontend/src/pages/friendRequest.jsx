@@ -35,7 +35,7 @@ export default function FriendRequest() {
                 </span>
                 <div className="flex space-x-3">
                   <button
-                    onClick={() => handleAccept(request.sender_id)}
+                    onClick={(e) => handleAccept(e, request.sender_id)}
                     className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 text-white font-semibold rounded-lg shadow-md transition"
                   >
                     Accept
@@ -104,6 +104,33 @@ export default function FriendRequest() {
     } catch (error) {
       console.error(error);
       setMessage('An unexpected error occurred.');
+    }
+  }
+
+  async function handleAccept(e, id) {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:3000/acceptFriendRequest', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: user,
+          senderID: id,
+        }), 
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setMessage(data.error);
+        return;
+      }
+      setMessage(null);
+      getRequests();
+    } catch (error) {
+      console.error(error);
+      setMessage('An unexpected error occured');
     }
   }
 };
