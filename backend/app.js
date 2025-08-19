@@ -1,5 +1,6 @@
 import express from 'express';
 import userRoutes from './routes/user.route.js';
+import dmRoutes from './routes/dm.route.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
@@ -12,7 +13,7 @@ app.use(cors({
   credentials: true
 }));
 app.use('/', userRoutes);
-
+app.use('/', dmRoutes);
 const PORT = 3000;
 
 app.listen(PORT, () => {
