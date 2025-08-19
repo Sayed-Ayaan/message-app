@@ -73,16 +73,12 @@ const login = [
       const user = await pool.query(text, [username]);
 
       if (user.rows.length == 0) {
-        return res.status(401).json({
-          errors: { msg: "User does not exists" }
-        });
+        return res.status(401).json({error: "User does not exists"});
       }
 
       const checkPassword = await bcrypt.compare(password, user.rows[0].password);
       if (!checkPassword) {
-        return res.status(401).json({
-          errors: { msg: "Incorrect Password" }
-        });
+        return res.status(401).json({error: "Incorrect Password"});
       }
 
       const access_token = jwt.sign({ id: user.rows[0].id }, process.env.ACCESS_SECRET_KEY, { expiresIn: '1h' });
@@ -96,7 +92,7 @@ const login = [
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: 'Internal server error!' })
+      return res.status(500).json({ error: 'Internal server error!' })
     }
   }
 ];

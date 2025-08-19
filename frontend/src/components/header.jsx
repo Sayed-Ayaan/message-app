@@ -7,7 +7,7 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between px-6 py-4 shadow-md bg-white dark:bg-black">
       <div className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-        {`Welcome, ${user}`}
+        {`${user}`}
       </div>
       <nav className="space-x-4">
         <button
